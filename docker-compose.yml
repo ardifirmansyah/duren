@@ -1,0 +1,44 @@
+version: '3'
+services:
+  app:
+    build: .
+    ports:
+      - 8080:8080
+    volumes:
+      - ./files/etc/app-config:/etc/app-config
+    environment:
+      - APPENV=development
+    depends_on:
+      - postgres
+      - redis
+      - lookupd
+      - nsqd
+  postgres:
+    image: postgres
+    restart: always
+    ports:
+      - 5433:5432
+    volumes:
+      - ./files/docker/migrate-db:/docker-entrypoint-initdb.d
+    environment:
+      - POSTGRES_USER=ardifirmansyah
+      - POSTGRES_PASSWORD=ardifirmansyah
+      - POSTGRES_DB=project
+  redis:
+    image: redis
+    ports:
+      - 6379:6379
+  lookupd:
+    image: nsqio/nsq
+    command: ["/nsqlookupd"]
+    ports:
+      - 4160:4160
+      - 4161:4161
+  nsqd:
+    image: nsqio/nsq
+    command: ["/nsqd","-broadcast-address=nsqd","-lookupd-tcp-address=lookupd:4160"]
+    links:
+      - lookupd
+    ports:
+      - 4150:4150
+      - 4151:4151
