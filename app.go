@@ -2,9 +2,7 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
-	"time"
 
 	"github.com/ardifirmansyah/duren/src/class"
 	"github.com/ardifirmansyah/duren/src/class/clients"
@@ -16,7 +14,21 @@ var (
 )
 
 func greet(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Hello Worlds! %s, %s", time.Now(), string(getClients()))
+	data := map[string]interface{}{
+		"database": func() string {
+			if err := db.Master.Status(); err != nil {
+				return err.Error()
+			}
+			return "database is connected"
+		}(),
+		"data": string(getClients()),
+	}
+
+	b, _ := json.Marshal(data)
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	w.Write(b)
 }
 
 func getClients() []byte {

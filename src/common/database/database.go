@@ -151,5 +151,5 @@ func (d *DB) Status() error {
 		return err
 	}
 
-	return errors.New("database connected")
+	return nil
 }
