@@ -1,11 +1,13 @@
-FROM golang:alpine
+FROM golang:1.12
 
 COPY . $GOPATH/src/github.com/ardifirmansyah/duren
 WORKDIR $GOPATH/src/github.com/ardifirmansyah/duren
 ADD . .
 
-# RUN dep ensure -v && go build -o
-RUN go install -v github.com/ardifirmansyah/duren
+RUN go get -u github.com/golang/dep/cmd/dep
+RUN $GOPATH/bin/dep ensure -v
+
+RUN go build -o duren
 
 COPY ./files/docker/wait-for.sh wait-for.sh
 RUN chmod +x wait-for.sh
