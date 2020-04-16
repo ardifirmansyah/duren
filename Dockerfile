@@ -1,11 +1,10 @@
-FROM golang:alpine
+FROM golang:latest
 
 COPY . $GOPATH/src/github.com/ardifirmansyah/duren
 WORKDIR $GOPATH/src/github.com/ardifirmansyah/duren
 ADD . .
 
-# RUN go get -u github.com/golang/dep/cmd/dep
-# RUN $GOPATH/bin/dep ensure -v
+RUN go mod download
 
 RUN go install -v $GOPATH/src/github.com/ardifirmansyah/duren
 
