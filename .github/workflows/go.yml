@@ -1,25 +1,44 @@
+name: Test Build
 on: [push, pull_request]
-name: Test
+
 jobs:
-  test:
-    strategy:
-      matrix:
-        go-version: [1.14]
-        os: [scrooge-runner-test]
-    runs-on: ${{ matrix.os }}
+  build:
+    name: Build
+    runs-on: scrooge-runner-test
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-    - name: Set GOPATH
-      # temporary fix
-      # see https://github.com/actions/setup-go/issues/14
-      run: |
-        echo "##[set-env name=GOPATH;]$(dirname $GITHUB_WORKSPACE)"
-        echo "##[add-path]$(dirname $GITHUB_WORKSPACE)/bin"
-      shell: bash
-    - name: Install Go
+
+    - name: Set up Go 1.15
       uses: actions/setup-go@v2
       with:
-        go-version: ${{ matrix.go-version }}
-    - name: Test
-      run: go test ./...
+        go-version: 1.15
+    
+    - name: Debug
+      run: |
+        pwd
+        echo ${GOPATH}
+        echo ${GOROOT}
+
+# env:
+#   HOME: "/home/ghactions/scrooge/work/"
+#   GOPATH: "/home/runner/rechargeapp/work/rechargeapp/go"
+#   GO111MODULE: on
+# #   GOPRIVATE: "github.com/tokopedia/*"
+  
+# jobs:
+#   test:
+#     strategy:
+#       matrix:
+#         go-version: [1.14]
+#         os: [scrooge-runner-test]
+#     runs-on: ${{ matrix.os }}
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v2
+        
+#       - name: Install Go
+#         uses: actions/setup-go@v2
+#         with:
+#           go-version: ${{ matrix.go-version }}
+          
+#       - name: Build
+#         run: go build -v ./...
