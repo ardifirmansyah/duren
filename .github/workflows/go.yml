@@ -1,6 +1,12 @@
 name: Test Build
 on: [push, pull_request]
 
+# env:
+#   HOME: "/home/ghactions/scrooge/work/"
+#   GOPATH: "/home/runner/rechargeapp/work/rechargeapp/go"
+#   GO111MODULE: on
+# #   GOPRIVATE: "github.com/tokopedia/*"
+
 jobs:
   build:
     name: Build
@@ -15,6 +21,7 @@ jobs:
     - name: Debug
       run: |
         pwd
+        echo ${HOME}
         echo ${GOPATH}
         echo ${GOROOT}
 
