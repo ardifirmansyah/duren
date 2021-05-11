@@ -9,7 +9,7 @@ on:
 jobs:
 
   build:
-    runs-on: scrooge-runner
+    runs-on: scrooge-runner-test
     steps:
     - uses: actions/checkout@v2
 
